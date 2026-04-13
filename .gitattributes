@@ -1,0 +1,12 @@
+# Normalize line endings
+* text=auto
+
+# Force LF for code files
+*.ts text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+
+# Windows scripts
+*.bat text eol=crlf
