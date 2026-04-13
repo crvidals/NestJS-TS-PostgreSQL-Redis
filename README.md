@@ -1,160 +1,96 @@
-# To-Do API - NestJS + PostgreSQL + Redis
+# 🚀 To-Do API - NestJS + PostgreSQL + Redis
 
-## Descripción
+## 📌 Descripción
 
 API REST para gestión de tareas desarrollada con NestJS.
 
-Permite a los usuarios registrarse, autenticarse y gestionar sus tareas con soporte de cache, paginación y logging.
+Permite a los usuarios registrarse, autenticarse y gestionar tareas con soporte de:
+- 🔐 JWT Authentication
+- 📄 Paginación
+- ⚡ Cache con Redis
+- 📊 Logging estructurado
 
 ---
 
-## Tecnologías
+## 🧰 Tecnologías
 
-* NestJS
-* TypeScript
-* PostgreSQL
-* Prisma ORM
-* Redis (ioredis)
-* Swagger (OpenAPI)
-* Docker
-
----
-
-## Features
-
-### Autenticación
-
-* Registro de usuario
-* Login con JWT
-* Endpoints protegidos con AuthGuard
+- NestJS
+- TypeScript
+- PostgreSQL
+- Prisma ORM
+- Redis (ioredis)
+- Swagger (OpenAPI)
+- Docker
 
 ---
 
-### Gestión de tareas (CRUD)
+## ✨ Features
 
-* Crear tarea
-* Listar tareas del usuario
-* Actualizar tarea (solo dueño)
-* Eliminar tarea (solo dueño)
-
----
-
-### Cache con Redis
-
-* Cache por usuario
-* Cache por filtros y paginación
-* TTL: 60 segundos
-* Invalidación automática en:
-
-  * creación
-  * actualización
-  * eliminación
+### 🔐 Autenticación
+- Registro de usuario
+- Login con JWT
+- Protección de rutas con Guards
 
 ---
 
-### Paginación
+### 📋 Gestión de tareas (CRUD)
+- Crear tarea
+- Listar tareas del usuario autenticado
+- Actualizar tarea (solo propietario)
+- Eliminar tarea (solo propietario)
 
-* Soporte de `page` y `limit`
-* Límite máximo de resultados
-* Respuesta estructurada:
+---
+
+### ⚡ Cache con Redis
+- Cache por usuario
+- Cache por filtros y paginación
+- TTL: 60 segundos
+- Invalidación automática en:
+  - creación
+  - actualización
+  - eliminación
+
+---
+
+### 📄 Paginación
+- Parámetros: `page` y `limit`
+- Límite máximo de resultados
+- Respuesta estructurada:
 
 ```json
 {
-  "data": [...],
+  "data": [],
   "meta": {
-    "total": 10,
+    "total": 0,
     "page": 1,
-    "lastPage": 5
+    "lastPage": 1
   }
 }
 ```
 
 ---
 
-### Logging estructurado
-
-* Logs en operaciones CRUD
-* Logs de cache:
-
-  * Cache HIT
-  * Cache MISS
-  * Cache SET
-* Logs de seguridad (accesos no autorizados)
+### 📊 Logging estructurado
+- Logs en operaciones CRUD
+- Cache logs:
+  - Cache HIT
+  - Cache MISS
+  - Cache SET
+- Logs de seguridad (accesos no autorizados)
 
 ---
 
-### Documentación API
+### 📚 Documentación API (Swagger)
 
-* Swagger UI disponible en:
-
-```
 http://localhost:3000/api
-```
 
 ---
 
-## Requisitos
+## 🔄 Flujo de uso
 
-* Node.js (>= 18)
-* Docker y Docker Compose
+### 1. Registrar usuario
 
----
-
-## Levantar servicios
-
-```bash
-docker-compose up -d
-```
-
-Servicios:
-
-* PostgreSQL → puerto 5432
-* Redis → puerto 6379
-
----
-
-## Configuración
-
-Crear archivo `.env`:
-
-```env
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/tasks_db"
-JWT_SECRET="super_secret_key"
-```
-
----
-
-## Instalación
-
-```bash
-npm install
-```
-
----
-
-## Migraciones
-
-```bash
-npx prisma migrate dev
-```
-
----
-
-## Ejecutar proyecto
-
-```bash
-npm run start:dev
-```
-
----
-
-## Autenticación
-
-### Registro
-
-```
 POST /auth/register
-```
 
 ```json
 {
@@ -165,68 +101,83 @@ POST /auth/register
 
 ---
 
-### Login
+### 2. Login
 
-```
 POST /auth/login
+
+```json
+{
+  "email": "test@test.com",
+  "password": "123456"
+}
 ```
 
 Respuesta:
 
 ```json
 {
-  "access_token": "..."
+  "access_token": "JWT_TOKEN"
 }
 ```
 
 ---
 
-## Uso del token
+### 3. Usar token
 
-Header:
-
-```
-Authorization: Bearer TU_TOKEN
-```
+Authorization:
+Bearer JWT_TOKEN
 
 ---
 
-## Endpoints
+### 4. Crear tarea
 
-### Crear tarea
-
-```
 POST /tasks
+
+```json
+{
+  "title": "Mi tarea",
+  "description": "Opcional",
+  "status": "PENDING"
+}
 ```
 
 ---
 
-### Listar tareas (con paginación y filtro)
+### 5. Listar tareas
 
-```
 GET /tasks?page=1&limit=10
+
 GET /tasks?status=PENDING&page=1&limit=5
-```
 
 ---
 
-### Actualizar tarea
+### 6. Actualizar tarea
 
-```
 PATCH /tasks/:id
+
+```json
+{
+  "title": "Tarea actualizada",
+  "status": "IN_PROGRESS"
+}
 ```
 
 ---
 
-### Eliminar tarea
+### 7. Eliminar tarea
 
-```
 DELETE /tasks/:id
-```
 
 ---
 
-## 🧪 Ejemplo de respuesta
+## ⚡ Cache
+
+- TTL: 60 segundos
+- Invalidación en create/update/delete
+
+---
+
+## 📊 Respuesta ejemplo
 
 ```json
 {
@@ -247,26 +198,79 @@ DELETE /tasks/:id
 
 ---
 
-## Decisiones técnicas
+## ⚙️ Requisitos
 
-* Prisma por tipado fuerte y facilidad de uso
-* Redis para mejorar performance en lecturas
-* Cache invalidado en mutaciones para mantener consistencia
-* Paginación para escalabilidad
-* Logging para observabilidad y debugging
+- Node.js >= 18
+- Docker
+- Docker Compose
 
 ---
 
-## Mejoras futuras
+## 🐳 Docker
 
-* Tests e2e
-* Paginación avanzada (cursor-based)
-* Rate limiting
-* Refresh tokens
-* Logging persistente (Winston / ELK)
+docker-compose up -d
 
 ---
 
-## Autor
+## ⚙️ .env
+
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/tasks_db"
+JWT_SECRET="super_secret_key"
+
+---
+
+## 📦 Instalación
+
+npm install
+
+---
+
+## 🧱 Migraciones
+
+npx prisma migrate dev
+
+---
+
+## ▶️ Ejecutar
+
+npm run start:dev
+
+---
+
+## 📡 Endpoints
+
+Auth:
+- POST /auth/register
+- POST /auth/login
+
+Tasks:
+- POST /tasks
+- GET /tasks
+- PATCH /tasks/:id
+- DELETE /tasks/:id
+
+---
+
+## 🧠 Decisiones técnicas
+
+- Prisma por tipado fuerte
+- Redis para cache
+- Paginación para escalabilidad
+- Logging para observabilidad
+- Invalidación de cache en mutaciones
+
+---
+
+## 🚀 Mejoras futuras
+
+- Tests e2e
+- Cursor pagination
+- Rate limiting
+- Refresh tokens
+- Logging con ELK / Winston
+
+---
+
+## 👨‍💻 Autor
 
 Cristian Vidal

@@ -12,16 +12,16 @@ async function bootstrap() {
     }),
   );
 
-  // 🔥 Swagger config
+  // Swagger config
   const config = new DocumentBuilder()
     .setTitle('To-Do API')
     .setDescription('API para gestión de tareas')
     .setVersion('1.0')
-    .addBearerAuth() // 👈 importante para JWT
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document); // 👉 http://localhost:3000/api
+  SwaggerModule.setup('api', app, document);
 
   await app.listen(3000);
 }

@@ -39,7 +39,7 @@ export class TasksService {
     page = 1,
     limit = 10,
   ) {
-    // 🔒 Validaciones
+    // Validaciones
     page = Math.max(1, page);
     limit = Math.min(Math.max(1, limit), 50);
 

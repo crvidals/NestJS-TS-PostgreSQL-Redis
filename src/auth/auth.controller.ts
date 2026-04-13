@@ -13,12 +13,7 @@ import {
 
   @ApiTags('auth')
   @Controller('auth')
-  
-  
-  //@Post('register')
 
-  
-  //@Post('login')
 
   @Controller('auth')
   export class AuthController {
@@ -36,7 +31,7 @@ import {
       return this.authService.login(dto);
     }
   
-    // 🔐 Endpoint protegido
+    // Endpoint protegido
     @UseGuards(AuthGuard('jwt'))
     @Get('me')
     getMe(@Req() req) {
